@@ -62,8 +62,8 @@ public class MainFrame extends JFrame {
 	
 	private String getLabelText(){
 		if(buttonSwitch)
-			return "true";
+			return "true true";
 		else
-			return "false";
+			return "false false";
 	}
 }
