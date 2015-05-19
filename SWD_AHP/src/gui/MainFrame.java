@@ -99,4 +99,35 @@ public class MainFrame extends JFrame {
 			tabbedPane.setSelectedIndex(2);
 		}
 	}
+	
+	public void onClickSetPreferences() {
+		Double[][] criteria = new Double[][]{
+				  { 1.0,	7.0,	0.3333 },
+				  { 0.1429,	1.0,	0.2 },
+				  { 3.0,	5.0,	1.0 }
+				};
+		
+		Double[][] products1 = new Double[][]{
+				  { 1.0,	0.2 },
+				  { 5.0,	1.0 }
+				};
+		
+		Double[][] products2 = new Double[][]{
+				  { 1.0,	7.0 },
+				  { 0.1429,	1.0 }
+				};
+		
+		Double[][] products3 = new Double[][]{
+				  { 1.0,	5.0 },
+				  { 0.2,	1.0 }
+				};
+		
+		ArrayList<Double[][]> matrices = new ArrayList<Double[][]>();
+		matrices.add(criteria);
+		matrices.add(products1);
+		matrices.add(products2);
+		matrices.add(products3);
+		
+		algorithm.setPreferences(matrices);
+	}
 }

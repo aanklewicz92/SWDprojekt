@@ -29,8 +29,27 @@ public class SomeClass {
 		//Jak jednak nie to pisz.
 	}
 
-	public void setPreferences() {
-	
+	public void setPreferences(ArrayList<Double[][]> matrices) {
+		System.out.println("Macierz kryteriów");
+		Double[][] criteriaMatix = matrices.get(0); //Zawsze na zerowym elemencie
+		for(int i = 0; i < criteriaMatix.length; i++) {
+			for(int j = 0; j < criteriaMatix.length; j++) {
+				System.out.print(criteriaMatix[i][j] + " ");
+			}
+			System.out.println();
+		}
+		
+		System.out.println("Macierze produktów");
+		for(int k = 1; k < matrices.size(); k++) { //Zaczynam od 1 bo na 0 by³a ta wy¿ej
+			System.out.println("Macierz " + k);
+			Double[][] productMatix = matrices.get(k); //Kolejny element z listy macierzy
+			for(int i = 0; i < productMatix.length; i++) {
+				for(int j = 0; j < productMatix.length; j++) {
+					System.out.print(productMatix[i][j] + " ");
+				}
+				System.out.println();
+			}
+		}
 	}
 	
 	public void runAlgorithm() {
