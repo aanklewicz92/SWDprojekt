@@ -129,5 +129,8 @@ public class MainFrame extends JFrame {
 		matrices.add(products3);
 		
 		algorithm.setPreferences(matrices);
+		algorithm.normalizeMatrixes(matrices);
+		
+		
 	}
 }

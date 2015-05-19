@@ -1,5 +1,6 @@
 package logic;
 
+import java.sql.Ref;
 import java.util.ArrayList;
 
 public class SomeClass {
@@ -29,7 +30,7 @@ public class SomeClass {
 		//Jak jednak nie to pisz.
 	}
 
-	public void setPreferences(ArrayList<Double[][]> matrices) {
+	public void setPreferences(ArrayList<Double[][]> matrices ) {
 		System.out.println("Macierz kryteriów");
 		Double[][] criteriaMatix = matrices.get(0); //Zawsze na zerowym elemencie
 		for(int i = 0; i < criteriaMatix.length; i++) {
@@ -41,16 +42,83 @@ public class SomeClass {
 		
 		System.out.println("Macierze produktów");
 		for(int k = 1; k < matrices.size(); k++) { //Zaczynam od 1 bo na 0 by³a ta wy¿ej
-			System.out.println("Macierz " + k);
+			//System.out.println("Macierz " + k);
 			Double[][] productMatix = matrices.get(k); //Kolejny element z listy macierzy
 			for(int i = 0; i < productMatix.length; i++) {
 				for(int j = 0; j < productMatix.length; j++) {
-					System.out.print(productMatix[i][j] + " ");
+					//System.out.print(productMatix[i][j] + " ");
 				}
-				System.out.println();
+				//System.out.println();
 			}
 		}
+		//System.out.println (criteriaMatix[1][2]);
+		
+		
 	}
+	public void normalizeMatrixes(ArrayList<Double[][]> matrices ){
+		
+		
+		Double[][] criteriaMatixs = matrices.get(0); 
+		Double[] cMatrix = new Double [criteriaMatixs.length];
+		Double[][]normalizeCriterialMatrix=new Double[criteriaMatixs.length][criteriaMatixs.length];
+		System.out.println("cmatrix");
+		System.out.println( "Macierz znormalizowana kryteriów");
+		double c=0;
+		for(int i=0; i<criteriaMatixs.length; i++){
+			for(int j=0; j<criteriaMatixs.length; j++){
+				c= c+criteriaMatixs[j][i];
+				cMatrix[i]=c;
+				}
+			cMatrix[i]=c;
+			System.out.print(cMatrix[i] + " ");
+			c=0;
+		}
+		System.out.println();
+		double d=0;
+		for(int k = 1; k < matrices.size(); k++) { 
+			//System.out.println("cmacierz " + k);
+			
+			Double[][] productMatixs = matrices.get(k);
+			Double[][] cmatrixes=new Double[k+1][productMatixs.length];
+		
+			for(int i = 0; i < productMatixs.length; i++) {
+				for(int j = 0; j < productMatixs.length; j++) {
+					d=d+productMatixs[j][i];
+					
+					}
+				cmatrixes[k][i]=d;
+				//System.out.println(cmatrixes[k][i] + " ");
+				d=0;
+				
+			}
+			System.out.println( " ");
+		}
+		System.out.println( "Macierz znormalizowana kryteriów");
+		Double [] s=new Double[criteriaMatixs.length];
+		
+		for(int i=0; i<criteriaMatixs.length; i++){
+			for(int j=0; j<criteriaMatixs.length; j++){
+				normalizeCriterialMatrix[j][i]=(criteriaMatixs[j][i]/cMatrix[i]);
+				System.out.print(normalizeCriterialMatrix[j][i] + " ");
+				}
+			System.out.println();
+			}
+		
+		double f=0;
+		for(int i=0; i<criteriaMatixs.length; i++){
+			for(int j=0; j<criteriaMatixs.length; j++){
+				f+=normalizeCriterialMatrix[i][j];
+				}
+			System.out.println ("f "+ i +" "+f);
+			s[i]=((1/criteriaMatixs.length)*f);// czemu tu niw dzia³a??
+			System.out.println ("s "+ i +" "+s[i]);
+			f=0;
+		}
+	
+		
+		
+	}
+	
 	
 	public void runAlgorithm() {
 		
