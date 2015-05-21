@@ -16,8 +16,13 @@ public class MainFrame extends JFrame {
 	private boolean doneProducts = false;
 	private boolean doneCriteria = false;
 	private JTabbedPane tabbedPane;
+	private PreferencesPanel preferencesPanel;
+	
+	private ArrayList<String> criteriaList = new ArrayList<String>();
+	private ArrayList<String> productList = new ArrayList<String>();
 	
 	private SomeClass algorithm = new SomeClass();
+	private PreferencesManager manager;
 	
 	/**
 	 * Launch the application.
@@ -55,8 +60,8 @@ public class MainFrame extends JFrame {
 		CriteriaPanel p2 = new CriteriaPanel(this);
 		tabbedPane.addTab("Kryteria", p2);
 		
-		PreferencesPanel p3 = new PreferencesPanel();
-		tabbedPane.addTab("Preferencje", p3);
+		preferencesPanel = new PreferencesPanel(this);
+		tabbedPane.addTab("Preferencje", preferencesPanel);
 		tabbedPane.setEnabledAt(2, false);
 		
 		ResultPanel p4 = new ResultPanel();
@@ -72,14 +77,16 @@ public class MainFrame extends JFrame {
 		if(!doneCriteria)
 			tabbedPane.setSelectedIndex(1);
 		algorithm.setProducts(list);
+		productList = list;
 		preferencesPossibleTest();
 	}
 	
-	public void onClickCriteriaDone(int n) {
+	public void onClickCriteriaDone(ArrayList<String> list) {
 		doneCriteria = true;
 		if(!doneProducts)
 			tabbedPane.setSelectedIndex(0);
-		algorithm.setCriteria(n);
+		algorithm.setCriteria(list.size());
+		criteriaList = list;
 		preferencesPossibleTest();
 	}
 	
@@ -97,6 +104,8 @@ public class MainFrame extends JFrame {
 			tabbedPane.setEnabledAt(1, false);
 			tabbedPane.setEnabledAt(2, true);
 			tabbedPane.setSelectedIndex(2);
+			manager = new PreferencesManager(productList.size(), criteriaList.size());
+			preferencesPanel.setManager(manager);
 		}
 	}
 	
@@ -130,7 +139,9 @@ public class MainFrame extends JFrame {
 		
 		algorithm.setPreferences(matrices);
 		algorithm.normalizeMatrixes(matrices);
-		
-		
+	}
+	
+	public PreferencesManager getPreferencesManager() {
+		return manager;
 	}
 }

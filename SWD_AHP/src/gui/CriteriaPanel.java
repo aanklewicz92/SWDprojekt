@@ -177,7 +177,10 @@ public class CriteriaPanel extends JPanel {
 				buttonAdd.setEnabled(false);
 				buttonDelete.setEnabled(false);
 				buttonDone.setEnabled(false);
-				parentFrame.onClickCriteriaDone(listModel.size());
+				ArrayList<String> list = new ArrayList<>();
+				for(int i = 0; i < listModel.size(); i++)
+					list.add(listModel.getElementAt(i));
+				parentFrame.onClickCriteriaDone(list);
 			}
 		});
 		GridBagConstraints gbcbuttonDone = new GridBagConstraints();

@@ -110,7 +110,7 @@ public class SomeClass {
 				f+=normalizeCriterialMatrix[i][j];
 				}
 			System.out.println ("f "+ i +" "+f);
-			s[i]=((1/criteriaMatixs.length)*f);// czemu tu niw dzia³a??
+			s[i]=((1.0/criteriaMatixs.length)*f);// czemu tu niw dzia³a??
 			System.out.println ("s "+ i +" "+s[i]);
 			f=0;
 		}
