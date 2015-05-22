@@ -17,13 +17,22 @@ import javax.swing.JRadioButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
-public class PreferencesPanel extends JPanel {
+import logic.InconsistentMatrixListener;
+
+public class PreferencesPanel extends JPanel implements InconsistentMatrixListener{
 	private PreferencesManager manager;
 	private MainFrame mainFrame;
+	private ArrayList<String> productsList, criteriaList;
 	
-	private Double answer = 5.0;
+	private JRadioButton[] radioPreferences = new JRadioButton[9];
+	private JLabel labelCriterionValue, labelProductAValue, labelProductBValue, labelProductA, labelProductB;
+	private JButton buttonNextQuestion, buttonPreviousQuestion;
+	
+	private Double answer;
 	private int[] active = {0, 0, 1};
+	private boolean runPossible = false;
 
 	/**
 	 * Create the panel.
@@ -33,126 +42,210 @@ public class PreferencesPanel extends JPanel {
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{2.0, 1.0, 1.0, 2.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		JLabel lblNewLabel_2 = new JLabel("W kategorii:");
-		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_2.gridx = 0;
-		gbc_lblNewLabel_2.gridy = 0;
-		add(lblNewLabel_2, gbc_lblNewLabel_2);
+		JLabel labelCriterion = new JLabel("W kategorii:");
+		GridBagConstraints gbc_labelCriterion = new GridBagConstraints();
+		gbc_labelCriterion.insets = new Insets(0, 0, 5, 5);
+		gbc_labelCriterion.gridx = 0;
+		gbc_labelCriterion.gridy = 0;
+		add(labelCriterion, gbc_labelCriterion);
 		
-		JLabel lblNewLabel_3 = new JLabel("<tu kategoria>");
-		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
-		gbc_lblNewLabel_3.gridwidth = 2;
-		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel_3.gridx = 2;
-		gbc_lblNewLabel_3.gridy = 0;
-		add(lblNewLabel_3, gbc_lblNewLabel_3);
+		labelCriterionValue = new JLabel("---");
+		GridBagConstraints gbc_labelCriterionValue = new GridBagConstraints();
+		gbc_labelCriterionValue.gridwidth = 2;
+		gbc_labelCriterionValue.insets = new Insets(0, 0, 5, 0);
+		gbc_labelCriterionValue.gridx = 2;
+		gbc_labelCriterionValue.gridy = 0;
+		add(labelCriterionValue, gbc_labelCriterionValue);
 		
-		JLabel lblNewLabel_4 = new JLabel("Produkt");
-		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
-		gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_4.gridx = 0;
-		gbc_lblNewLabel_4.gridy = 1;
-		add(lblNewLabel_4, gbc_lblNewLabel_4);
+		labelProductA = new JLabel("Kategoria");
+		GridBagConstraints gbc_labelProductA = new GridBagConstraints();
+		gbc_labelProductA.insets = new Insets(0, 0, 5, 5);
+		gbc_labelProductA.gridx = 0;
+		gbc_labelProductA.gridy = 1;
+		add(labelProductA, gbc_labelProductA);
 		
-		JLabel lblNewLabel_1 = new JLabel("jest preferowany wzgl\u0119dem");
-		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-		gbc_lblNewLabel_1.gridwidth = 2;
-		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_1.gridx = 1;
-		gbc_lblNewLabel_1.gridy = 1;
-		add(lblNewLabel_1, gbc_lblNewLabel_1);
+		JLabel labelPreferedThan = new JLabel("jest wzglêdem");
+		GridBagConstraints gbc_labelPreferedThan = new GridBagConstraints();
+		gbc_labelPreferedThan.gridwidth = 2;
+		gbc_labelPreferedThan.insets = new Insets(0, 0, 5, 5);
+		gbc_labelPreferedThan.gridx = 1;
+		gbc_labelPreferedThan.gridy = 1;
+		add(labelPreferedThan, gbc_labelPreferedThan);
 		
-		JLabel lblNewLabel_5 = new JLabel("Produkt");
-		GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
-		gbc_lblNewLabel_5.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel_5.gridx = 3;
-		gbc_lblNewLabel_5.gridy = 1;
-		add(lblNewLabel_5, gbc_lblNewLabel_5);
+		labelProductB = new JLabel("Kategoria");
+		GridBagConstraints gbc_labelProductB = new GridBagConstraints();
+		gbc_labelProductB.insets = new Insets(0, 0, 5, 0);
+		gbc_labelProductB.gridx = 3;
+		gbc_labelProductB.gridy = 1;
+		add(labelProductB, gbc_labelProductB);
 		
-		JRadioButton rdbtnNewRadioButton_4 = new JRadioButton("R\u00F3wnowa\u017Cnie");
-		GridBagConstraints gbc_rdbtnNewRadioButton_4 = new GridBagConstraints();
-		gbc_rdbtnNewRadioButton_4.anchor = GridBagConstraints.WEST;
-		gbc_rdbtnNewRadioButton_4.insets = new Insets(0, 0, 5, 5);
-		gbc_rdbtnNewRadioButton_4.gridx = 2;
-		gbc_rdbtnNewRadioButton_4.gridy = 2;
-		add(rdbtnNewRadioButton_4, gbc_rdbtnNewRadioButton_4);
+		labelProductAValue = new JLabel();
+		GridBagConstraints gbc_labelProductAValue = new GridBagConstraints();
+		gbc_labelProductAValue.gridheight = 3;
+		gbc_labelProductAValue.insets = new Insets(0, 0, 5, 5);
+		gbc_labelProductAValue.gridx = 0;
+		gbc_labelProductAValue.gridy = 5;
+		add(labelProductAValue, gbc_labelProductAValue);
 		
-		JLabel lblNewLabel_6 = new JLabel("<tu produkt A>");
-		GridBagConstraints gbc_lblNewLabel_6 = new GridBagConstraints();
-		gbc_lblNewLabel_6.gridheight = 3;
-		gbc_lblNewLabel_6.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_6.gridx = 0;
-		gbc_lblNewLabel_6.gridy = 3;
-		add(lblNewLabel_6, gbc_lblNewLabel_6);
+		labelProductBValue = new JLabel();
+		GridBagConstraints gbc_radioProductBValue = new GridBagConstraints();
+		gbc_radioProductBValue.gridheight = 3;
+		gbc_radioProductBValue.insets = new Insets(0, 0, 5, 0);
+		gbc_radioProductBValue.gridx = 3;
+		gbc_radioProductBValue.gridy = 5;
+		add(labelProductBValue, gbc_radioProductBValue);
 		
-		JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("S\u0142abo");
-		GridBagConstraints gbc_rdbtnNewRadioButton_3 = new GridBagConstraints();
-		gbc_rdbtnNewRadioButton_3.anchor = GridBagConstraints.WEST;
-		gbc_rdbtnNewRadioButton_3.insets = new Insets(0, 0, 5, 5);
-		gbc_rdbtnNewRadioButton_3.gridx = 2;
-		gbc_rdbtnNewRadioButton_3.gridy = 3;
-		add(rdbtnNewRadioButton_3, gbc_rdbtnNewRadioButton_3);
-		
-		JLabel lblNewLabel_7 = new JLabel("<tu produkt B>");
-		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
-		gbc_lblNewLabel_7.gridheight = 3;
-		gbc_lblNewLabel_7.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel_7.gridx = 3;
-		gbc_lblNewLabel_7.gridy = 3;
-		add(lblNewLabel_7, gbc_lblNewLabel_7);
-		
-		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("Silnie");
-		GridBagConstraints gbc_rdbtnNewRadioButton_2 = new GridBagConstraints();
-		gbc_rdbtnNewRadioButton_2.anchor = GridBagConstraints.WEST;
-		gbc_rdbtnNewRadioButton_2.insets = new Insets(0, 0, 5, 5);
-		gbc_rdbtnNewRadioButton_2.gridx = 2;
-		gbc_rdbtnNewRadioButton_2.gridy = 4;
-		add(rdbtnNewRadioButton_2, gbc_rdbtnNewRadioButton_2);
-		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Bardzo silnie");
-		GridBagConstraints gbc_rdbtnNewRadioButton_1 = new GridBagConstraints();
-		gbc_rdbtnNewRadioButton_1.anchor = GridBagConstraints.WEST;
-		gbc_rdbtnNewRadioButton_1.insets = new Insets(0, 0, 5, 5);
-		gbc_rdbtnNewRadioButton_1.gridx = 2;
-		gbc_rdbtnNewRadioButton_1.gridy = 5;
-		add(rdbtnNewRadioButton_1, gbc_rdbtnNewRadioButton_1);
-		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Ekstremalnie");
-		GridBagConstraints gbc_rdbtnNewRadioButton = new GridBagConstraints();
-		gbc_rdbtnNewRadioButton.anchor = GridBagConstraints.WEST;
-		gbc_rdbtnNewRadioButton.insets = new Insets(0, 0, 5, 5);
-		gbc_rdbtnNewRadioButton.gridx = 2;
-		gbc_rdbtnNewRadioButton.gridy = 6;
-		add(rdbtnNewRadioButton, gbc_rdbtnNewRadioButton);
-		
-		JButton btnNewButton_1 = new JButton("Poprzednie");
-		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
-		gbc_btnNewButton_1.insets = new Insets(0, 0, 0, 5);
-		gbc_btnNewButton_1.gridx = 0;
-		gbc_btnNewButton_1.gridy = 7;
-		add(btnNewButton_1, gbc_btnNewButton_1);
-		
-		JButton btnNewButton = new JButton("Nast\u0119pne");
-		btnNewButton.addActionListener(new ActionListener() {
+		radioPreferences[0] = new JRadioButton("Bezwzglêdnie wa¿niejsza");
+		radioPreferences[0].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				manager.setAnswer(answer);
-				active = manager.getQuestion();
-				if(active[0] != -1)
-					showMatrix(manager.getMatrix(active[0]));
-				else
-					btnNewButton.setEnabled(false);
+				selectedPreference(0);
 			}
 		});
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.gridx = 3;
-		gbc_btnNewButton.gridy = 7;
-		add(btnNewButton, gbc_btnNewButton);
+		GridBagConstraints gbc_radioButton1 = new GridBagConstraints();
+		gbc_radioButton1.anchor = GridBagConstraints.WEST;
+		gbc_radioButton1.insets = new Insets(0, 0, 5, 5);
+		gbc_radioButton1.gridx = 2;
+		gbc_radioButton1.gridy = 2;
+		add(radioPreferences[0], gbc_radioButton1);
+		
+		radioPreferences[1] = new JRadioButton("Zdecydowanie wa¿niejsza");
+		radioPreferences[1].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selectedPreference(1);
+			}
+		});
+		GridBagConstraints gbc_radioButton3 = new GridBagConstraints();
+		gbc_radioButton3.anchor = GridBagConstraints.WEST;
+		gbc_radioButton3.insets = new Insets(0, 0, 5, 5);
+		gbc_radioButton3.gridx = 2;
+		gbc_radioButton3.gridy = 3;
+		add(radioPreferences[1], gbc_radioButton3);
+		
+		radioPreferences[2] = new JRadioButton("WyraŸnie wa¿niejsza");
+		radioPreferences[2].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selectedPreference(2);
+			}
+		});
+		GridBagConstraints gbc_radioButton5 = new GridBagConstraints();
+		gbc_radioButton5.anchor = GridBagConstraints.WEST;
+		gbc_radioButton5.insets = new Insets(0, 0, 5, 5);
+		gbc_radioButton5.gridx = 2;
+		gbc_radioButton5.gridy = 4;
+		add(radioPreferences[2], gbc_radioButton5);
+		
+		radioPreferences[3] = new JRadioButton("Nieznacznie wa¿niejsza");
+		radioPreferences[3].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selectedPreference(3);
+			}
+		});
+		GridBagConstraints gbc_radioButton7 = new GridBagConstraints();
+		gbc_radioButton7.anchor = GridBagConstraints.WEST;
+		gbc_radioButton7.insets = new Insets(0, 0, 5, 5);
+		gbc_radioButton7.gridx = 2;
+		gbc_radioButton7.gridy = 5;
+		add(radioPreferences[3], gbc_radioButton7);
+		
+		radioPreferences[4] = new JRadioButton("Równowa¿na");
+		radioPreferences[4].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selectedPreference(4);
+			}
+		});
+		GridBagConstraints gbc_radioButton9 = new GridBagConstraints();
+		gbc_radioButton9.anchor = GridBagConstraints.WEST;
+		gbc_radioButton9.insets = new Insets(0, 0, 5, 5);
+		gbc_radioButton9.gridx = 2;
+		gbc_radioButton9.gridy = 6;
+		add(radioPreferences[4], gbc_radioButton9);
+		
+		radioPreferences[5] = new JRadioButton("Nieznacznie mniej wa¿na");
+		radioPreferences[5].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selectedPreference(5);
+			}
+		});
+		GridBagConstraints gbc_radioButton10 = new GridBagConstraints();
+		gbc_radioButton10.anchor = GridBagConstraints.WEST;
+		gbc_radioButton10.insets = new Insets(0, 0, 5, 5);
+		gbc_radioButton10.gridx = 2;
+		gbc_radioButton10.gridy = 7;
+		add(radioPreferences[5], gbc_radioButton10);
+		
+		radioPreferences[6] = new JRadioButton("WyraŸnie mniej wa¿na");
+		radioPreferences[6].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selectedPreference(6);
+			}
+		});
+		GridBagConstraints gbc_radioButton11 = new GridBagConstraints();
+		gbc_radioButton11.anchor = GridBagConstraints.WEST;
+		gbc_radioButton11.insets = new Insets(0, 0, 5, 5);
+		gbc_radioButton11.gridx = 2;
+		gbc_radioButton11.gridy = 8;
+		add(radioPreferences[6], gbc_radioButton11);
+		
+		radioPreferences[7] = new JRadioButton("Zdecydowanie mniej wa¿na");
+		radioPreferences[7].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selectedPreference(7);
+			}
+		});
+		GridBagConstraints gbc_radioButton12 = new GridBagConstraints();
+		gbc_radioButton12.anchor = GridBagConstraints.WEST;
+		gbc_radioButton12.insets = new Insets(0, 0, 5, 5);
+		gbc_radioButton12.gridx = 2;
+		gbc_radioButton12.gridy = 9;
+		add(radioPreferences[7], gbc_radioButton12);
+		
+		radioPreferences[8] = new JRadioButton("Bezwzglêdmnie mniej wa¿na");
+		radioPreferences[8].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selectedPreference(8);
+			}
+		});
+		GridBagConstraints gbc_radioButton13 = new GridBagConstraints();
+		gbc_radioButton13.anchor = GridBagConstraints.WEST;
+		gbc_radioButton13.insets = new Insets(0, 0, 5, 5);
+		gbc_radioButton13.gridx = 2;
+		gbc_radioButton13.gridy = 10;
+		add(radioPreferences[8], gbc_radioButton13);
+		
+		buttonNextQuestion = new JButton("Nast\u0119pne");
+		buttonNextQuestion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(!runPossible)
+					getQuestion(true);
+				else {
+					mainFrame.onClickRun(manager.getMatrices());
+				}
+			}
+		});
+		
+		buttonPreviousQuestion = new JButton("Poprzednie");
+		buttonPreviousQuestion.setEnabled(false);
+		buttonPreviousQuestion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getQuestion(false);
+			}
+		});
+		GridBagConstraints gbc_buttonPreviousQuestion = new GridBagConstraints();
+		gbc_buttonPreviousQuestion.insets = new Insets(0, 0, 0, 5);
+		gbc_buttonPreviousQuestion.gridx = 0;
+		gbc_buttonPreviousQuestion.gridy = 11;
+		add(buttonPreviousQuestion, gbc_buttonPreviousQuestion);
+		GridBagConstraints gbc_buttonNextQuestion = new GridBagConstraints();
+		gbc_buttonNextQuestion.gridx = 3;
+		gbc_buttonNextQuestion.gridy = 11;
+		add(buttonNextQuestion, gbc_buttonNextQuestion);
+		
+		selectedPreference(4);
 	}
 
 	private void showMatrix(Double[][] matrix) {
@@ -166,9 +259,114 @@ public class PreferencesPanel extends JPanel {
 		JOptionPane.showMessageDialog(mainFrame, message);
 	}
 	
-	public void setManager(PreferencesManager manager) {
-		this.manager = manager;
+	private void selectedPreference(int n) {
+		for(int i = 0; i < radioPreferences.length; i++) {
+			if(i != n)
+				radioPreferences[i].setSelected(false);
+			else
+				radioPreferences[i].setSelected(true);
+		}
+		
+		switch(n) {
+		case 0:
+			answer = 9.0;
+			break;
+		case 1:
+			answer = 7.0;
+			break;
+		case 2:
+			answer = 5.0;
+			break;
+		case 3:
+			answer = 3.0;
+			break;
+		case 4:
+			answer = 1.0;
+			break;
+		case 5:
+			answer = 1.0/3.0;
+			break;
+		case 6:
+			answer = 0.2;
+			break;
+		case 7:
+			answer = 1.0/7.0;
+			break;
+		case 8:
+			answer = 1.0/9.0;
+			break;
+		}
 	}
 	
+	private void getQuestion(boolean next) {
+		active = manager.getQuestion(next, answer);
+		
+		if(active[0] == -1) {
+			buttonNextQuestion.setText("Uruchom AHP");
+			runPossible = true;
+		} else {
+			buttonNextQuestion.setText("Nastêpne");
+			runPossible = false;
+		}
+		if(active[0] == -2)
+			buttonPreviousQuestion.setEnabled(false);
+		else
+			buttonPreviousQuestion.setEnabled(true);
+		
+		if(active[0] > 0 ) {
+			labelCriterionValue.setText(criteriaList.get(active[0]-1));
+			labelProductAValue.setText(productsList.get(active[1]));
+			labelProductBValue.setText(productsList.get(active[2]));
+			labelProductA.setText("Produkt");
+			labelProductB.setText("Produktu");
+			radioPreferences[0].setText("Bezwzglêdnie lepszy");
+			radioPreferences[1].setText("Zdecydowanie lepszy");
+			radioPreferences[2].setText("WyraŸnie lepszy");
+			radioPreferences[3].setText("Nieznacznie lepszy");
+			radioPreferences[4].setText("Równowa¿ny");
+			radioPreferences[5].setText("Nieznacznie gorszy");
+			radioPreferences[6].setText("WyraŸnie gorszy");
+			radioPreferences[7].setText("Zdecydowanie gorszy");
+			radioPreferences[8].setText("Bezwzglêdnie gorszy");
+		}
+		
+		if(active[0] == 0) {
+			labelCriterionValue.setText("---");
+			labelProductAValue.setText(criteriaList.get(active[1]));
+			labelProductBValue.setText(criteriaList.get(active[2]));
+			labelProductA.setText("Kategoria");
+			labelProductB.setText("Kategorii");
+			radioPreferences[0].setText("Bezwzglêdnie wa¿niejsza");
+			radioPreferences[1].setText("Zdecydowanie wa¿niejsza");
+			radioPreferences[2].setText("WyraŸnie wa¿niejsza");
+			radioPreferences[3].setText("Nieznacznie wa¿niejsza");
+			radioPreferences[4].setText("Równowa¿na");
+			radioPreferences[5].setText("Nieznacznie mniej wa¿na");
+			radioPreferences[6].setText("WyraŸnie mniej wa¿na");
+			radioPreferences[7].setText("Zdecydowanie mniej wa¿na");
+			radioPreferences[8].setText("Bezwzglêdnie mniej wa¿na");
+		}
+		
+		selectedPreference(active[3]);
+		
+		if(active[4] != -1)
+			showMatrix(manager.getMatrix(active[4]));
+	}
 	
+	public void setDataFromFrame(PreferencesManager manager, ArrayList<String> productsList, ArrayList<String> criteriaList) {
+		this.manager = manager;
+		this.productsList = productsList;
+		this.criteriaList = criteriaList;
+
+		labelProductAValue.setText(criteriaList.get(active[1]));
+		labelProductBValue.setText(criteriaList.get(active[2]));
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {}
+
+	@Override
+	public void inconsistentMatrix(Integer number) {
+		JOptionPane.showMessageDialog(mainFrame, "Macierz " + number + " jest niespójna");
+	}
 }

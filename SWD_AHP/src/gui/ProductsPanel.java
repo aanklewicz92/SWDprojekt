@@ -41,7 +41,7 @@ public class ProductsPanel extends JPanel {
 		gridBagLayout.rowWeights = new double[]{2.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		JLabel labelDescription = new JLabel("Zdefiniuj listê kryteriów");
+		JLabel labelDescription = new JLabel("Zdefiniuj listê produktów");
 		GridBagConstraints gbclabelDescription = new GridBagConstraints();
 		gbclabelDescription.gridwidth = 2;
 		gbclabelDescription.insets = new Insets(0, 0, 5, 5);

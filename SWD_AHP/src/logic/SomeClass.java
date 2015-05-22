@@ -1,6 +1,5 @@
 package logic;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 
 public class SomeClass {
@@ -16,21 +15,13 @@ public class SomeClass {
 	 * zwróci jak¹œ listê/tablicê/coœ innego z wynikami, co ja poka¿ê w gui.
 	 */
 	
-	public SomeClass() {}
+	InconsistentMatrixListener listener;
 	
-	public void setProducts(ArrayList<String> list) {
-		System.out.println("Produkty:");
-		for(String product : list)
-			System.out.println(product);
-	}
-	
-	public void setCriteria(int n) {
-		System.out.println("Liczba kryteriow: " + n);
-		//Wydaje mi sie ze wystarczy Ci liczba kryteriow.
-		//Jak jednak nie to pisz.
+	public SomeClass(InconsistentMatrixListener listener) {
+		this.listener = listener;
 	}
 
-	public void setPreferences(ArrayList<Double[][]> matrices ) {
+	public void setPreferences(ArrayList<Double[][]> matrices) {
 		System.out.println("Macierz kryteriów");
 		Double[][] criteriaMatix = matrices.get(0); //Zawsze na zerowym elemencie
 		for(int i = 0; i < criteriaMatix.length; i++) {
@@ -216,7 +207,16 @@ public class SomeClass {
 	}
 	
 	
-	public void runAlgorithm() {
+	public void runAlgorithm(ArrayList<String> productsList, ArrayList<Double[][]> matrices) {
+		listener.inconsistentMatrix(0);
+		//po prostu daj tak¹ linijkê tam gdzie wykryjesz
+		//niespójn¹ macierz a w argumencie daj numer tablicy z matrices
 		
+		System.out.println("Produkty:");
+		for(String product : productsList)
+			System.out.print(product + " ");
+		System.out.println();
+		
+		System.out.println("Liczba kryteriow: " + matrices.get(0).length);
 	}
 }
