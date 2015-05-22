@@ -61,6 +61,10 @@ public class SomeClass {
 		Double[][] criteriaMatixs = matrices.get(0); 
 		Double[] cMatrix = new Double [criteriaMatixs.length];
 		Double[][]normalizeCriterialMatrix=new Double[criteriaMatixs.length][criteriaMatixs.length];
+		Double[][]normalizeProductMatrixes=new Double[criteriaMatixs.length][criteriaMatixs.length];
+		Double[][] cmatrixes=new Double[matrices.size()][matrices.size()];
+		
+		int lenght = matrices.size();
 		System.out.println("cmatrix");
 		System.out.println( "Macierz znormalizowana kryteriów");
 		double c=0;
@@ -72,14 +76,15 @@ public class SomeClass {
 			cMatrix[i]=c;
 			System.out.print(cMatrix[i] + " ");
 			c=0;
-		}
+		}//suma kolumn w kryteriach
 		System.out.println();
 		double d=0;
 		for(int k = 1; k < matrices.size(); k++) { 
-			//System.out.println("cmacierz " + k);
+			System.out.println("cmacierz " + k);
 			
 			Double[][] productMatixs = matrices.get(k);
-			Double[][] cmatrixes=new Double[k+1][productMatixs.length];
+		
+			
 		
 			for(int i = 0; i < productMatixs.length; i++) {
 				for(int j = 0; j < productMatixs.length; j++) {
@@ -87,12 +92,14 @@ public class SomeClass {
 					
 					}
 				cmatrixes[k][i]=d;
-				//System.out.println(cmatrixes[k][i] + " ");
+				System.out.println(cmatrixes[k][i] + " ");
 				d=0;
 				
 			}
+			//suma kolumn w produktach
 			System.out.println( " ");
 		}
+		//macierz znormalizowana kryteriów
 		System.out.println( "Macierz znormalizowana kryteriów");
 		Double [] s=new Double[criteriaMatixs.length];
 		
@@ -103,18 +110,107 @@ public class SomeClass {
 				}
 			System.out.println();
 			}
-		
+		//normalizacja macierzy produktów
+		for(int k = 1; k < matrices.size(); k++) { 
+			
+			Double[][] productMatixs = matrices.get(k);
+			
+			System.out.println("Normalizowana macierz produktów:"+k);
+			for(int i = 0; i < productMatixs.length; i++) {
+				for(int j = 0; j < productMatixs.length; j++) {
+					normalizeProductMatrixes[j][i]=(productMatixs[j][i]/cmatrixes[k][i]);
+					System.out.print(normalizeProductMatrixes[j][i] + " ");
+					
+				}
+			System.out.println();
+				
+			}	
+			}
+		//obliczanie macierzy s dla kryteriów
 		double f=0;
 		for(int i=0; i<criteriaMatixs.length; i++){
 			for(int j=0; j<criteriaMatixs.length; j++){
 				f+=normalizeCriterialMatrix[i][j];
 				}
-			System.out.println ("f "+ i +" "+f);
-			s[i]=((1.0/criteriaMatixs.length)*f);// czemu tu niw dzia³a??
+			
+			//System.out.println ("f "+ i +" "+f);
+			s[i]=((1.0/criteriaMatixs.length)*f);
 			System.out.println ("s "+ i +" "+s[i]);
 			f=0;
+			
+		}
+		double suma=0;
+		for(int i=0; i<criteriaMatixs.length; i++){
+			suma+=cMatrix[i]*s[i];
+		}
+		double CIProductMatrix=(suma-criteriaMatixs.length)/(criteriaMatixs.length-1);
+		System.out.println("CI product matrix" + CIProductMatrix);
+		
+		double RI= howLong(criteriaMatixs.length);
+		double cr=CIProductMatrix/RI;
+		
+		System.out.println("CR"+cr);//policzone Cr macierzy kryteriów 
+		
+		
+		//s dla produktów
+		//Double[][] sproducts=new Double[matrices.size()][matrices.size()];
+		
+		
+			double sg=0;
+		
+			for(int i = 0; i < lenght; i++) {
+				//System.out.println("wektor s:"+i);
+				for(int j = 0; j < lenght; j++) {
+					//sg+=normalizeProductMatrixes[i][j];
+				}
+					//System.out.println(sg);
+				}
+					
+					
+					
+				
 		}
 	
+	
+		
+		
+		
+	
+	public double howLong (int lenght){
+	double RI=0;
+		switch (lenght){
+				case 2:  RI=0.52;
+				break;////NIE MAM WARTOŒCI
+				case 3:  RI=0.58;
+				break;
+				case 4:  RI=0.89;
+				break;
+				case 5: RI=1.11;
+				break;
+				case 6: RI=1.25;
+				break;
+				case 7: RI=1.37;
+				break;
+				case 8: RI=1.4;
+				break;
+				case 9: RI=1.45;
+				break;
+				case 10: RI=1.49;
+				break;
+				case 11: RI=1.51;
+				break;
+				case 12: RI=1.54;
+				break;
+				case 13: RI=1.56;
+				break;
+				case 14: RI=1.58;
+				break;
+				default: 
+                break;
+		}
+		
+		return RI;
+		
 		
 		
 	}

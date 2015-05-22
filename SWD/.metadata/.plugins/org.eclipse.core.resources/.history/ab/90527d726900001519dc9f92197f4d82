@@ -1,0 +1,199 @@
+package logic;
+
+import java.sql.Ref;
+import java.util.ArrayList;
+
+public class SomeClass {
+	/*
+	 * W tej paczce twórz sobie swoje klasy z wszelk¹ logik¹ obliczeñ.
+	 * Musimy ustaliæ w jakiej formie bêdziemy przesy³aæ dane miêdzy logik¹ a gui.
+	 * 
+	 * Ja to widzê tak, ¿e w gui bêdê tworzyæ obiekt jakiejœ klasy st¹d i ten obiekt
+	 * albo bêdzie mia³ metody albo po prostu pola, do których ja przypiszê dane wziête
+	 * u¿ytkownika w takiej formie jak bêd¹ Ci potrzebne tutaj czyli lista/tablica/coœ innego,
+	 * po dostarczeniu wszystkich danych pod jakimœ buttonem gui bêdzie siê kry³o
+	 * wywo³anie metody run czy start czy coœ na tym obiekcie i ta metoda po zrobieniu ahp
+	 * zwróci jak¹œ listê/tablicê/coœ innego z wynikami, co ja poka¿ê w gui.
+	 */
+	
+	public SomeClass() {}
+	
+	public void setProducts(ArrayList<String> list) {
+		System.out.println("Produkty:");
+		for(String product : list)
+			System.out.println(product);
+	}
+	
+	public void setCriteria(int n) {
+		System.out.println("Liczba kryteriow: " + n);
+		//Wydaje mi sie ze wystarczy Ci liczba kryteriow.
+		//Jak jednak nie to pisz.
+	}
+
+	public void setPreferences(ArrayList<Double[][]> matrices ) {
+		System.out.println("Macierz kryteriów");
+		Double[][] criteriaMatix = matrices.get(0); //Zawsze na zerowym elemencie
+		for(int i = 0; i < criteriaMatix.length; i++) {
+			for(int j = 0; j < criteriaMatix.length; j++) {
+				System.out.print(criteriaMatix[i][j] + " ");
+			}
+			System.out.println();
+		}
+		
+		System.out.println("Macierze produktów");
+		for(int k = 1; k < matrices.size(); k++) { //Zaczynam od 1 bo na 0 by³a ta wy¿ej
+			//System.out.println("Macierz " + k);
+			Double[][] productMatix = matrices.get(k); //Kolejny element z listy macierzy
+			for(int i = 0; i < productMatix.length; i++) {
+				for(int j = 0; j < productMatix.length; j++) {
+					//System.out.print(productMatix[i][j] + " ");
+				}
+				//System.out.println();
+			}
+		}
+		//System.out.println (criteriaMatix[1][2]);
+		
+		
+	}
+	public void normalizeMatrixes(ArrayList<Double[][]> matrices ){
+		
+		
+		Double[][] criteriaMatixs = matrices.get(0); 
+		Double[] cMatrix = new Double [criteriaMatixs.length];
+		Double[][]normalizeCriterialMatrix=new Double[criteriaMatixs.length][criteriaMatixs.length];
+		System.out.println("cmatrix");
+		System.out.println( "Macierz znormalizowana kryteriów");
+		double c=0;
+		for(int i=0; i<criteriaMatixs.length; i++){
+			for(int j=0; j<criteriaMatixs.length; j++){
+				c= c+criteriaMatixs[j][i];
+				cMatrix[i]=c;
+				}
+			cMatrix[i]=c;
+			System.out.print(cMatrix[i] + " ");
+			c=0;
+		}//suma kolumn w kryteriach
+		System.out.println();
+		double d=0;
+		for(int k = 1; k < matrices.size(); k++) { 
+			System.out.println("cmacierz " + k);
+			
+			Double[][] productMatixs = matrices.get(k);
+			Double[][] cmatrixes=new Double[k+1][productMatixs.length];
+		
+			for(int i = 0; i < productMatixs.length; i++) {
+				for(int j = 0; j < productMatixs.length; j++) {
+					d=d+productMatixs[j][i];
+					
+					}
+				cmatrixes[k][i]=d;
+				System.out.println(cmatrixes[k][i] + " ");
+				d=0;
+				
+			}
+			//suma kolumn w produktach
+			System.out.println( " ");
+		}
+		//macierz znormalizowana kryteriów
+		System.out.println( "Macierz znormalizowana kryteriów");
+		Double [] s=new Double[criteriaMatixs.length];
+		
+		for(int i=0; i<criteriaMatixs.length; i++){
+			for(int j=0; j<criteriaMatixs.length; j++){
+				normalizeCriterialMatrix[j][i]=(criteriaMatixs[j][i]/cMatrix[i]);
+				System.out.print(normalizeCriterialMatrix[j][i] + " ");
+				}
+			System.out.println();
+			}
+		//normalizacja macierzy produktów
+		for(int k = 1; k < matrices.size(); k++) { 
+			
+			
+			Double[][] productMatixs = matrices.get(k);
+			Double[][] normalizeProductMatrixes=new Double[k+1][productMatixs.length];
+			System.out.println("Normalizowana macierz produktów:"+k);
+			for(int i = 0; i < productMatixs.length; i++) {
+				for(int j = 0; j < productMatixs.length; j++) {
+					//double d=cmatrixes[k][j];
+					//normalizeProductMatrixes[j][i]=(productMatixs[j][i]/(d));
+					
+					System.out.print(normalizeProductMatrixes[j][i] + " ");
+				}
+			System.out.println();
+				
+			}	
+			}
+		//obliczanie macierzy s dla kryteriów
+		double f=0;
+		for(int i=0; i<criteriaMatixs.length; i++){
+			for(int j=0; j<criteriaMatixs.length; j++){
+				f+=normalizeCriterialMatrix[i][j];
+				}
+			
+			//System.out.println ("f "+ i +" "+f);
+			s[i]=((1.0/criteriaMatixs.length)*f);
+			System.out.println ("s "+ i +" "+s[i]);
+			f=0;
+			
+		}
+		double suma=0;
+		for(int i=0; i<criteriaMatixs.length; i++){
+			suma+=cMatrix[i]*s[i];
+		}
+		double CIProductMatrix=(suma-criteriaMatixs.length)/(criteriaMatixs.length-1);
+		System.out.println("CI product matrix" + CIProductMatrix);
+		
+		double RI= howLong(criteriaMatixs.length);
+		double cr=CIProductMatrix/RI;
+		
+		System.out.println("CR"+cr);//policzone Cr macierzy kryteriów 
+		
+		}
+		
+		
+		
+	
+	public double howLong (int lenght){
+	double RI=0;
+		switch (lenght){
+				case 2:  RI=0.52;
+				break;
+				case 3:  RI=0.58;
+				break;
+				case 4:  RI=0.89;
+				break;
+				case 5: RI=1.11;
+				break;
+				case 6: RI=1.25;
+				break;
+				case 7: RI=1.37;
+				break;
+				case 8: RI=1.4;
+				break;
+				case 9: RI=1.45;
+				break;
+				case 10: RI=1.49;
+				break;
+				case 11: RI=1.51;
+				break;
+				case 12: RI=1.54;
+				break;
+				case 13: RI=1.56;
+				break;
+				case 14: RI=1.58;
+				break;
+				default: 
+                break;
+		}
+		
+		return RI;
+		
+		
+		
+	}
+	
+	
+	public void runAlgorithm() {
+		
+	}
+}
