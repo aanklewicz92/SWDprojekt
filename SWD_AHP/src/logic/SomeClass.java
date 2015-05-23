@@ -22,16 +22,16 @@ public class SomeClass {
 	}
 
 	public void setPreferences(ArrayList<Double[][]> matrices) {
-		System.out.println("Macierz kryteriów");
+		//System.out.println("Macierz kryteriów");
 		Double[][] criteriaMatix = matrices.get(0); //Zawsze na zerowym elemencie
 		for(int i = 0; i < criteriaMatix.length; i++) {
 			for(int j = 0; j < criteriaMatix.length; j++) {
-				System.out.print(criteriaMatix[i][j] + " ");
+				//System.out.print(criteriaMatix[i][j] + " ");
 			}
-			System.out.println();
+			//System.out.println();
 		}
 		
-		System.out.println("Macierze produktów");
+		//System.out.println("Macierze produktów");
 		for(int k = 1; k < matrices.size(); k++) { //Zaczynam od 1 bo na 0 by³a ta wy¿ej
 			//System.out.println("Macierz " + k);
 			Double[][] productMatix = matrices.get(k); //Kolejny element z listy macierzy
@@ -50,14 +50,14 @@ public class SomeClass {
 		
 		
 		Double[][] criteriaMatixs = matrices.get(0); 
+		Double[][] product=matrices.get(1);
 		Double[] cMatrix = new Double [criteriaMatixs.length];
 		Double[][]normalizeCriterialMatrix=new Double[criteriaMatixs.length][criteriaMatixs.length];
-		Double[][]normalizeProductMatrixes=new Double[criteriaMatixs.length][criteriaMatixs.length];
+		Double[][]normalizeProductMatrixes=new Double[product.length][product.length];
 		Double[][] cmatrixes=new Double[matrices.size()][matrices.size()];
 		
-		int lenght = matrices.size();
-		System.out.println("cmatrix");
-		System.out.println( "Macierz znormalizowana kryteriów");
+		
+		
 		double c=0;
 		for(int i=0; i<criteriaMatixs.length; i++){
 			for(int j=0; j<criteriaMatixs.length; j++){
@@ -65,13 +65,13 @@ public class SomeClass {
 				cMatrix[i]=c;
 				}
 			cMatrix[i]=c;
-			System.out.print(cMatrix[i] + " ");
+			//System.out.print(cMatrix[i] + " ");
 			c=0;
 		}//suma kolumn w kryteriach
-		System.out.println();
+		//System.out.println();
 		double d=0;
 		for(int k = 1; k < matrices.size(); k++) { 
-			System.out.println("cmacierz " + k);
+			//System.out.println("cmacierz " + k);
 			
 			Double[][] productMatixs = matrices.get(k);
 		
@@ -83,40 +83,25 @@ public class SomeClass {
 					
 					}
 				cmatrixes[k][i]=d;
-				System.out.println(cmatrixes[k][i] + " ");
+				//System.out.println(cmatrixes[k][i] + " ");
 				d=0;
 				
 			}
 			//suma kolumn w produktach
-			System.out.println( " ");
+			//System.out.println( " ");
 		}
 		//macierz znormalizowana kryteriów
-		System.out.println( "Macierz znormalizowana kryteriów");
+		//System.out.println( "Macierz znormalizowana kryteriów");
 		Double [] s=new Double[criteriaMatixs.length];
 		
 		for(int i=0; i<criteriaMatixs.length; i++){
 			for(int j=0; j<criteriaMatixs.length; j++){
 				normalizeCriterialMatrix[j][i]=(criteriaMatixs[j][i]/cMatrix[i]);
-				System.out.print(normalizeCriterialMatrix[j][i] + " ");
+				//System.out.print(normalizeCriterialMatrix[j][i] + " ");
 				}
-			System.out.println();
+			//System.out.println();
 			}
-		//normalizacja macierzy produktów
-		for(int k = 1; k < matrices.size(); k++) { 
-			
-			Double[][] productMatixs = matrices.get(k);
-			
-			System.out.println("Normalizowana macierz produktów:"+k);
-			for(int i = 0; i < productMatixs.length; i++) {
-				for(int j = 0; j < productMatixs.length; j++) {
-					normalizeProductMatrixes[j][i]=(productMatixs[j][i]/cmatrixes[k][i]);
-					System.out.print(normalizeProductMatrixes[j][i] + " ");
-					
-				}
-			System.out.println();
-				
-			}	
-			}
+		
 		//obliczanie macierzy s dla kryteriów
 		double f=0;
 		for(int i=0; i<criteriaMatixs.length; i++){
@@ -126,7 +111,7 @@ public class SomeClass {
 			
 			//System.out.println ("f "+ i +" "+f);
 			s[i]=((1.0/criteriaMatixs.length)*f);
-			System.out.println ("s "+ i +" "+s[i]);
+			//System.out.println ("s "+ i +" "+s[i]);
 			f=0;
 			
 		}
@@ -135,43 +120,65 @@ public class SomeClass {
 			suma+=cMatrix[i]*s[i];
 		}
 		double CIProductMatrix=(suma-criteriaMatixs.length)/(criteriaMatixs.length-1);
-		System.out.println("CI product matrix" + CIProductMatrix);
+		//System.out.println("CI product matrix" + CIProductMatrix);
 		
 		double RI= howLong(criteriaMatixs.length);
 		double cr=CIProductMatrix/RI;
 		
-		System.out.println("CR"+cr);//policzone Cr macierzy kryteriów 
+		//System.out.println("CR"+cr);//policzone Cr macierzy kryteriów 
 		
-		
+		ArrayList<Double[][]> NormalizedProduct = new ArrayList<Double[][]>();
+		//normalizacja macierzy produktów
+		for(int k = 1; k < matrices.size(); k++) {
+			
+			Double[][] productMatrixs = matrices.get(k);
+			
+			
+			//System.out.println("Normalizowana macierz produktów:"+k);
+			for(int i = 0; i < productMatrixs.length; i++) {
+				for(int j = 0; j < productMatrixs.length; j++) {
+					normalizeProductMatrixes[i][j]=(productMatrixs[j][i]/cmatrixes[k][i]);
+					//System.out.print(normalizeProductMatrixes[i][j] + " ");
+					
+				}
+						
+			}
+			NormalizedProduct.add(normalizeProductMatrixes);//dodaje element do tablicy
+			
+			
+			
+					
+			}
 		//s dla produktów
-		//Double[][] sproducts=new Double[matrices.size()][matrices.size()];
+		System.out.println();
+		Double[][] normalize = NormalizedProduct.get(2);
+		for(int h = 0; h < normalize.length; h++) {
+			for(int l= 0; l< normalize.length; l++) {
+				
+				System.out.print("tablica ³adowana "+ 2+" " +normalize[h][l]  );
+				System.out.println();
+				
+				}};
 		
-		
-			double sg=0;
-		
-			for(int i = 0; i < lenght; i++) {
-				//System.out.println("wektor s:"+i);
-				for(int j = 0; j < lenght; j++) {
-					//sg+=normalizeProductMatrixes[i][j];
-				}
-					//System.out.println(sg);
-				}
+		//System.out.println(product.length);
+		for(int k = 0; k < NormalizedProduct.size(); k++) { 
+			Double[][] normalized = NormalizedProduct.get(k);
+			for(int h = 0; h < normalized.length; h++) {
+				for(int l= 0; l< normalize.length; l++) {
 					
-					
-					
+					System.out.print("tablica ³adowana "+ k +" " +normalized[h][l]  );
+					}};
+			
+			System.out.println();
+		}
 				
 		}
-	
-	
-		
-		
-		
 	
 	public double howLong (int lenght){
 	double RI=0;
 		switch (lenght){
 				case 2:  RI=0.52;
-				break;////NIE MAM WARTOŒCI
+				break;////NIE MAM WARTOŒCI, nie wiem co tu wpisaæ 
 				case 3:  RI=0.58;
 				break;
 				case 4:  RI=0.89;
