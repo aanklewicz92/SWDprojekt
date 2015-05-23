@@ -2,19 +2,12 @@ package gui;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import java.awt.GridBagLayout;
-
 import javax.swing.JButton;
-
 import java.awt.GridBagConstraints;
-
 import javax.swing.JLabel;
-
 import java.awt.Insets;
-
 import javax.swing.JRadioButton;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -247,17 +240,6 @@ public class PreferencesPanel extends JPanel implements InconsistentMatrixListen
 		
 		selectedPreference(4);
 	}
-
-	private void showMatrix(Double[][] matrix) {
-		String message = "Macierz <tu nazwa>\n\n";
-		for(int i = 0; i < matrix.length; i++) {
-			for(int j = 0; j < matrix.length; j++) {
-				message += matrix[i][j] + "   ";
-			}
-			message += "\n";
-		}
-		JOptionPane.showMessageDialog(mainFrame, message);
-	}
 	
 	private void selectedPreference(int n) {
 		for(int i = 0; i < radioPreferences.length; i++) {
@@ -349,8 +331,12 @@ public class PreferencesPanel extends JPanel implements InconsistentMatrixListen
 		
 		selectedPreference(active[3]);
 		
-		if(active[4] != -1)
-			showMatrix(manager.getMatrix(active[4]));
+		if(active[4] != -1) {
+			if(active[4] == 0)
+				MatrixDialog.main(criteriaList, manager.getMatrix(active[4]), "Macierz kryteriów");
+			else
+				MatrixDialog.main(productsList, manager.getMatrix(active[4]), "Macierz produktów");
+		}
 	}
 	
 	public void setDataFromFrame(PreferencesManager manager, ArrayList<String> productsList, ArrayList<String> criteriaList) {
@@ -367,6 +353,20 @@ public class PreferencesPanel extends JPanel implements InconsistentMatrixListen
 
 	@Override
 	public void inconsistentMatrix(Integer number) {
-		JOptionPane.showMessageDialog(mainFrame, "Macierz " + number + " jest niespójna");
+		Object[] options = {"Ok", "Poka¿ macierz"};
+		int n = JOptionPane.showOptionDialog(mainFrame,
+				"Macierz " + number + " jest niespójna",
+				"Macierz niespójna",
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.WARNING_MESSAGE,
+				null,
+				options,
+				options[1]);
+		
+		if(n == 1)
+			if(number == 0)
+				MatrixDialog.main(criteriaList, manager.getMatrix(number), "Macierz kryteriów");
+			else
+				MatrixDialog.main(productsList, manager.getMatrix(number), "Macierz produktów");
 	}
 }

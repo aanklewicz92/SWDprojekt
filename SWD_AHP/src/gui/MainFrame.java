@@ -8,15 +8,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
+import logic.AlgorithmListener;
 import logic.SomeClass;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements AlgorithmListener{
 	private boolean doneProducts = false;
 	private boolean doneCriteria = false;
 	private JTabbedPane tabbedPane;
 	private PreferencesPanel preferencesPanel;
+	private ResultPanel resultPanel;
 	
 	private ArrayList<String> criteriaList = new ArrayList<String>();
 	private ArrayList<String> productsList = new ArrayList<String>();
@@ -64,12 +67,9 @@ public class MainFrame extends JFrame {
 		tabbedPane.addTab("Preferencje", preferencesPanel);
 		tabbedPane.setEnabledAt(2, false);
 		
-		ResultPanel p4 = new ResultPanel();
-		tabbedPane.addTab("Ranking", p4);
+		resultPanel = new ResultPanel();
+		tabbedPane.addTab("Ranking", resultPanel);
 		tabbedPane.setEnabledAt(3, false);
-		
-		AboutPanel p5 = new AboutPanel();
-		tabbedPane.addTab("O programie", p5);
 	}
 	
 	private void preferencesPossibleTest() {
@@ -108,12 +108,11 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void onClickRun(ArrayList<Double[][]> matrices){
-		algorithm = new SomeClass(preferencesPanel);
-		algorithm.setPreferences(matrices);
-		algorithm.runAlgorithm(productsList, matrices);
+		algorithm = new SomeClass(preferencesPanel, this);
+		algorithm.runAlgorithm(matrices);
 	}
 	
-	public void onClickSetPreferences() {
+	public void testAlgorithm() {  //metoda do wywalenia jak bêdzie wszystko dzia³aæ
 		Double[][] criteria = new Double[][]{
 				  { 1.0,	7.0,	0.3333 },
 				  { 0.1429,	1.0,	0.2 },
@@ -141,7 +140,7 @@ public class MainFrame extends JFrame {
 		matrices.add(products2);
 		matrices.add(products3);
 		
-		algorithm = new SomeClass(preferencesPanel);
+		algorithm = new SomeClass(preferencesPanel, this);
 		algorithm.setPreferences(matrices);
 		algorithm.normalizeMatrixes(matrices);
 	}
@@ -156,5 +155,20 @@ public class MainFrame extends JFrame {
 	
 	public ArrayList<String> getCriteria() {
 		return criteriaList;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {}
+
+	@Override
+	public void algorithmFinished(ArrayList<Integer> rank) {
+		if(rank.get(0) != -1) {
+			ArrayList<String> textRank = new ArrayList<String>();
+			for(Integer index : rank)
+				textRank.add(productsList.get(index));
+			resultPanel.loadRank(textRank);
+			tabbedPane.setEnabledAt(3, true);
+			tabbedPane.setSelectedIndex(3);
+		}
 	}
 }

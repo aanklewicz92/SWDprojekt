@@ -15,10 +15,12 @@ public class SomeClass {
 	 * zwróci jak¹œ listê/tablicê/coœ innego z wynikami, co ja poka¿ê w gui.
 	 */
 	
-	InconsistentMatrixListener listener;
+	InconsistentMatrixListener inconsistentMarixListener;
+	AlgorithmListener algorithmListener;
 	
-	public SomeClass(InconsistentMatrixListener listener) {
-		this.listener = listener;
+	public SomeClass(InconsistentMatrixListener incnsistentMatrixListener, AlgorithmListener algorithmListener) {
+		this.inconsistentMarixListener = incnsistentMatrixListener;
+		this.algorithmListener = algorithmListener;
 	}
 
 	public void setPreferences(ArrayList<Double[][]> matrices) {
@@ -214,16 +216,25 @@ public class SomeClass {
 	}
 	
 	
-	public void runAlgorithm(ArrayList<String> productsList, ArrayList<Double[][]> matrices) {
-		listener.inconsistentMatrix(0);
+	public void runAlgorithm(ArrayList<Double[][]> matrices) {
+		inconsistentMarixListener.inconsistentMatrix(0);
 		//po prostu daj tak¹ linijkê tam gdzie wykryjesz
 		//niespójn¹ macierz a w argumencie daj numer tablicy z matrices
 		
-		System.out.println("Produkty:");
-		for(String product : productsList)
-			System.out.print(product + " ");
-		System.out.println();
-		
+		System.out.println("Liczba produktów: " + matrices.get(1).length);
 		System.out.println("Liczba kryteriow: " + matrices.get(0).length);
+		//to do wywalenia bêdzie oczywiœcie
+		
+		ArrayList<Integer> productsRank = new ArrayList<Integer>();
+		for(int i = 0; i < matrices.get(1).length; i++)
+			productsRank.add(i);
+		//Ty do tej listy dasz indeksy produktów w takiej kolejnoœci jak Ci w rankingu wyjdzie
+		
+		//nie wiem w koñcu czy jak jest jakaœ macierz niespójna to czy robi siê dalej czy nie
+		//ale zostawiam furtkê, ¿e jakby siê nie robi³o to wyœlij mi w tym productsRank
+		//na pierwszym elemencie -1
+		
+		algorithmListener.algorithmFinished(productsRank);
+		//i potem odpal t¹ linijkê z t¹ list¹ w argumencie
 	}
 }

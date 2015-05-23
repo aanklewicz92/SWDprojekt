@@ -1,7 +1,6 @@
 package gui;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -171,7 +170,7 @@ public class ProductsPanel extends JPanel {
 		add(buttonClearAll, gbcbuttonClearAll);
 		
 		buttonDone = new JButton("Gotowe");
-		//buttonDone.setEnabled(false);
+		//buttonDone.setEnabled(false); //do odkomentowania
 		buttonDone.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				/*textFieldName.setEnabled(false);
@@ -183,7 +182,7 @@ public class ProductsPanel extends JPanel {
 				for(int i = 0; i < listModel.size(); i++)
 					list.add(listModel.getElementAt(i));
 				parentFrame.onClickProductsDone(list);*/
-				parentFrame.onClickSetPreferences();
+				parentFrame.testAlgorithm(); //linijka do wywalenia jak bêdzie wszystko dzia³aæ
 			}
 		});
 		GridBagConstraints gbcbuttonDone = new GridBagConstraints();
@@ -202,7 +201,7 @@ public class ProductsPanel extends JPanel {
 	private boolean listTest() {
 		if (textFieldName.getText().trim().length() == 0)
 			return false;
-		if (!textFieldName.getText().matches("[\\w ]+"))
+		if (textFieldName.getText().trim().length() > 10)
 			return false;
 		if (listModel.size() >= 15)
 			return false;

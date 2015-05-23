@@ -10,7 +10,6 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -199,7 +198,7 @@ public class CriteriaPanel extends JPanel {
 	private boolean listTest() {
 		if (textFieldName.getText().trim().length() == 0)
 			return false;
-		if (!textFieldName.getText().matches("[\\w ]+"))
+		if (textFieldName.getText().trim().length() > 10)
 			return false;
 		if (listModel.size() >= 15)
 			return false;

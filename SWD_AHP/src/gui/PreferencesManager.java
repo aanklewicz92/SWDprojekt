@@ -75,16 +75,6 @@ public class PreferencesManager {
 		return new int[] {activeMatrix, activeRowNumber, activeColNumber, selectedRadio(answerInMatrix), matrixToShow};
 	}
 	
-	private void printMatrix(int n) {
-		Double[][] matrix = matrices.get(n);
-		for(int i = 0; i < matrix.length; i++) {
-			for(int j = 0; j < matrix.length; j++) {
-				System.out.print(matrix[i][j] + "   ");
-			}
-			System.out.println();
-		}
-	}
-	
 	private int selectedRadio(Double answer) {
 		if(answer != null) {
 			if(answer == 9.0)
