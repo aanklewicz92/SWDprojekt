@@ -191,14 +191,47 @@ public class SomeClass {
 					sum=0;			
 				}
 			}
-			//for(int i=0;i<product.length; i++){
-				//System.out.println("r"+i+" "+rMatrix[i]);
-			//}
-		
+	}
 			
+			
+		/*	b_sort(rMatrix); // sortuj
 			 
+			 
+			// wyswietl posortowae liczby
+			System.out.println("Posortowane liczby:");
+			
+			for(int i=0;i<product.length; i++){
+				System.out.println("r"+i+" "+rMatrix[i]);
 			}
-	
+			
+	}
+	public static void b_sort(Double[] tablica)
+	{
+	int mniejszaLiczba = tablica.length-1; // indeks pierwszej porownywanej liczby; wartosc poczatkowa
+	int wiekszaLiczba = mniejszaLiczba-1; // indeks drugiej porownywanej liczby; wartosc poczatkowa
+	 
+	double tmp;
+	while (wiekszaLiczba >= 0) // indeks drugiej porownywanej liczby musi byc nie mniejszy niz zero
+	{
+	if (tablica[wiekszaLiczba] > tablica[mniejszaLiczba]) // jesli druga liczba jest wieksza niz pierwsza
+	{
+	tmp = tablica[wiekszaLiczba];
+	tablica[wiekszaLiczba] = tablica[mniejszaLiczba]; // zamien wartosci
+	tablica[mniejszaLiczba] = tmp;
+	 
+	mniejszaLiczba = tablica.length-1;  // zresetuj licznik
+	wiekszaLiczba = mniejszaLiczba-1;   // zresetuj licznik
+	}
+	else // jesli druga liczba jest mniejsza lub rowna pierwszej, zmniejsz licznik o 1
+	{
+	mniejszaLiczba--;
+	wiekszaLiczba--;
+	}
+	}
+	}
+   
+    
+*/
 	
 	public double howLong (int lenght){
 	double RI=0;
