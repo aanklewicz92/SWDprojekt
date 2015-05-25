@@ -55,9 +55,10 @@ public class SomeClass {
 		Double[][] product=matrices.get(1);
 		Double[] cMatrix = new Double [criteriaMatixs.length];
 		Double[][]normalizeCriterialMatrix=new Double[criteriaMatixs.length][criteriaMatixs.length];
-		Double[][]normalizeProductMatrixes=new Double[product.length][product.length];
+		Double [][] sProducts=new Double[matrices.size()][product.length];
 		Double[][] cmatrixes=new Double[matrices.size()][matrices.size()];
-		
+		Double [] s=new Double[criteriaMatixs.length];
+		ArrayList<Double[][]> NormalizedProduct = new ArrayList<Double[][]>();
 		
 		
 		double c=0;
@@ -66,36 +67,28 @@ public class SomeClass {
 				c= c+criteriaMatixs[j][i];
 				cMatrix[i]=c;
 				}
-			cMatrix[i]=c;
+			cMatrix[i]=c; //suma kolumn w kryteriach
 			//System.out.print(cMatrix[i] + " ");
 			c=0;
-		}//suma kolumn w kryteriach
+		}
 		//System.out.println();
 		double d=0;
 		for(int k = 1; k < matrices.size(); k++) { 
 			//System.out.println("cmacierz " + k);
-			
 			Double[][] productMatixs = matrices.get(k);
-		
-			
-		
 			for(int i = 0; i < productMatixs.length; i++) {
 				for(int j = 0; j < productMatixs.length; j++) {
 					d=d+productMatixs[j][i];
 					
 					}
-				cmatrixes[k][i]=d;
+				cmatrixes[k][i]=d;//suma kolumn w produktach
 				//System.out.println(cmatrixes[k][i] + " ");
 				d=0;
-				
 			}
-			//suma kolumn w produktach
 			//System.out.println( " ");
 		}
 		//macierz znormalizowana kryteriów
 		//System.out.println( "Macierz znormalizowana kryteriów");
-		Double [] s=new Double[criteriaMatixs.length];
-		
 		for(int i=0; i<criteriaMatixs.length; i++){
 			for(int j=0; j<criteriaMatixs.length; j++){
 				normalizeCriterialMatrix[j][i]=(criteriaMatixs[j][i]/cMatrix[i]);
@@ -113,68 +106,68 @@ public class SomeClass {
 			
 			//System.out.println ("f "+ i +" "+f);
 			s[i]=((1.0/criteriaMatixs.length)*f);
-			//System.out.println ("s "+ i +" "+s[i]);
+			System.out.println ("s "+ i +" "+s[i]);
 			f=0;
-			
 		}
+		
 		double suma=0;
 		for(int i=0; i<criteriaMatixs.length; i++){
 			suma+=cMatrix[i]*s[i];
 		}
 		double CIProductMatrix=(suma-criteriaMatixs.length)/(criteriaMatixs.length-1);
 		//System.out.println("CI product matrix" + CIProductMatrix);
-		
 		double RI= howLong(criteriaMatixs.length);
 		double cr=CIProductMatrix/RI;
-		
 		//System.out.println("CR"+cr);//policzone Cr macierzy kryteriów 
-		
-		ArrayList<Double[][]> NormalizedProduct = new ArrayList<Double[][]>();
 		//normalizacja macierzy produktów
 		for(int k = 1; k < matrices.size(); k++) {
-			
 			Double[][] productMatrixs = matrices.get(k);
-			
-			
+			Double[][]normalizeProductMatrixes=new Double[product.length][product.length];
 			//System.out.println("Normalizowana macierz produktów:"+k);
 			for(int i = 0; i < productMatrixs.length; i++) {
 				for(int j = 0; j < productMatrixs.length; j++) {
 					normalizeProductMatrixes[i][j]=(productMatrixs[j][i]/cmatrixes[k][i]);
 					//System.out.print(normalizeProductMatrixes[i][j] + " ");
-					
-				}
-						
+				}	
 			}
 			NormalizedProduct.add(normalizeProductMatrixes);//dodaje element do tablicy
-			
-			
-			
-					
 			}
-		//s dla produktów
-		System.out.println();
-		Double[][] normalize = NormalizedProduct.get(2);
-		for(int h = 0; h < normalize.length; h++) {
-			for(int l= 0; l< normalize.length; l++) {
-				
-				System.out.print("tablica ³adowana "+ 2+" " +normalize[h][l]  );
-				System.out.println();
-				
-				}};
-		
-		//System.out.println(product.length);
+			
 		for(int k = 0; k < NormalizedProduct.size(); k++) { 
 			Double[][] normalized = NormalizedProduct.get(k);
+			double suma1=0;
 			for(int h = 0; h < normalized.length; h++) {
-				for(int l= 0; l< normalize.length; l++) {
-					
-					System.out.print("tablica ³adowana "+ k +" " +normalized[h][l]  );
-					}};
-			
+				for(int l= 0; l< normalized.length; l++) {
+					suma1+=normalized[l][h];
+					}
+				sProducts[k][h]=(1.0/normalized.length)*suma1;
+				//System.out.println(sProducts[k][h]);
+				suma1=0;
+				};
 			System.out.println();
 		}
+		Double[] rMatrix = new Double [criteriaMatixs.length];
+			for(int h = 0; h < criteriaMatixs.length; h++) {
+				double sum=0;
+				double se=0;
+				for(int j=0; j<product.length; j++){
+					for(int i= 0; i< criteriaMatixs.length; i++) {
+						se=sProducts[i][j];
+						sum+=(s[i]*se);
+					}
+					rMatrix[j]=sum;
+					sum=0;			
+				}
+			}
+			for(int i=0;i<product.length; i++){
+				System.out.println("r"+i+" "+rMatrix[i]);
+			}
+			for(int i=0;i<product.length; i++){
 				
+			}
+			
 		}
+	
 	
 	public double howLong (int lenght){
 	double RI=0;
