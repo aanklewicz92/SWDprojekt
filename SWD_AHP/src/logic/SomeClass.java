@@ -56,9 +56,13 @@ public class SomeClass {
 		Double[] cMatrix = new Double [criteriaMatixs.length];
 		Double[][]normalizeCriterialMatrix=new Double[criteriaMatixs.length][criteriaMatixs.length];
 		Double [][] sProducts=new Double[matrices.size()][product.length];
-		Double[][] cmatrixes=new Double[matrices.size()][matrices.size()];
+		Double[][] cmatrixes=new Double[matrices.size()][product.length];
 		Double [] s=new Double[criteriaMatixs.length];
 		ArrayList<Double[][]> NormalizedProduct = new ArrayList<Double[][]>();
+		Double[] rMatrix = new Double [criteriaMatixs.length];
+		Double [] CIProduct=new Double[matrices.size()];
+		double RIPproduct=howLong(matrices.size());
+		Double [] CRProduct=new Double[matrices.size()];
 		
 		
 		double c=0;
@@ -76,8 +80,8 @@ public class SomeClass {
 		for(int k = 1; k < matrices.size(); k++) { 
 			//System.out.println("cmacierz " + k);
 			Double[][] productMatixs = matrices.get(k);
-			for(int i = 0; i < productMatixs.length; i++) {
-				for(int j = 0; j < productMatixs.length; j++) {
+			for(int i = 0; i < product.length; i++) {
+				for(int j = 0; j < product.length; j++) {
 					d=d+productMatixs[j][i];
 					
 					}
@@ -106,7 +110,7 @@ public class SomeClass {
 			
 			//System.out.println ("f "+ i +" "+f);
 			s[i]=((1.0/criteriaMatixs.length)*f);
-			System.out.println ("s "+ i +" "+s[i]);
+			//System.out.println ("s "+ i +" "+s[i]);
 			f=0;
 		}
 		
@@ -118,6 +122,9 @@ public class SomeClass {
 		//System.out.println("CI product matrix" + CIProductMatrix);
 		double RI= howLong(criteriaMatixs.length);
 		double cr=CIProductMatrix/RI;
+		if(cr>=0.1){
+			//inconsistentMarixListener.inconsistentMatrix(0);
+		}
 		//System.out.println("CR"+cr);//policzone Cr macierzy kryteriów 
 		//normalizacja macierzy produktów
 		for(int k = 1; k < matrices.size(); k++) {
@@ -132,8 +139,9 @@ public class SomeClass {
 			}
 			NormalizedProduct.add(normalizeProductMatrixes);//dodaje element do tablicy
 			}
-			
+		
 		for(int k = 0; k < NormalizedProduct.size(); k++) { 
+			
 			Double[][] normalized = NormalizedProduct.get(k);
 			double suma1=0;
 			for(int h = 0; h < normalized.length; h++) {
@@ -144,9 +152,33 @@ public class SomeClass {
 				//System.out.println(sProducts[k][h]);
 				suma1=0;
 				};
-			System.out.println();
+			//System.out.println();
 		}
-		Double[] rMatrix = new Double [criteriaMatixs.length];
+		
+		
+		
+				
+		
+		for(int i=0; i<criteriaMatixs.length; i++){
+					
+					double sumaci=0;
+					for(int j=0; j<product.length; j++){
+						//System.out.println("product "+sProducts[i][j]+ " * cmatrix "+cmatrixes[i+1][j] );
+						
+						sumaci+=(sProducts[i][j]*cmatrixes[i+1][j]);
+					}
+					//System.out.println(i+" "+sumaci);
+					CIProduct[i]=(sumaci-product.length)/(product.length-1);
+					sumaci=0;
+					CRProduct[i]=CIProduct[i]/RIPproduct;
+					//System.out.println("CR dla produktów"+i+" "+CRProduct[i]);
+				if(CRProduct[i]>=0.1){
+						inconsistentMarixListener.inconsistentMatrix(i);
+					}
+				//System.out.println(criteriaMatixs.length);
+		}
+					
+		
 			for(int h = 0; h < criteriaMatixs.length; h++) {
 				double sum=0;
 				double se=0;
@@ -159,14 +191,13 @@ public class SomeClass {
 					sum=0;			
 				}
 			}
-			for(int i=0;i<product.length; i++){
-				System.out.println("r"+i+" "+rMatrix[i]);
-			}
-			for(int i=0;i<product.length; i++){
-				
-			}
+			//for(int i=0;i<product.length; i++){
+				//System.out.println("r"+i+" "+rMatrix[i]);
+			//}
+		
 			
-		}
+			 
+			}
 	
 	
 	public double howLong (int lenght){
