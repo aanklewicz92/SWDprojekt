@@ -198,8 +198,6 @@ public class CriteriaPanel extends JPanel {
 	private boolean listTest() {
 		if (textFieldName.getText().trim().length() == 0)
 			return false;
-		if (textFieldName.getText().trim().length() > 10)
-			return false;
 		if (listModel.size() >= 15)
 			return false;
 		for(int i = 0; i < listModel.size(); i++){

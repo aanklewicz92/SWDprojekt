@@ -353,9 +353,14 @@ public class PreferencesPanel extends JPanel implements InconsistentMatrixListen
 
 	@Override
 	public void inconsistentMatrix(Integer number) {
+		String message = "kryteriów";
+		int userMatrixNumber = number + 1;
+		if (number != 0)
+			message = "produktów " + userMatrixNumber;
+		
 		Object[] options = {"Ok", "Poka¿ macierz"};
 		int n = JOptionPane.showOptionDialog(mainFrame,
-				"Macierz " + number + " jest niespójna",
+				"Macierz " + message + " jest niespójna",
 				"Macierz niespójna",
 				JOptionPane.YES_NO_CANCEL_OPTION,
 				JOptionPane.WARNING_MESSAGE,

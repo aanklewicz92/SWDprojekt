@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import logic.AlgorithmListener;
-import logic.SomeClass;
+import logic.Algorithm;
 
 public class MainFrame extends JFrame implements AlgorithmListener{
 	private boolean doneProducts = false;
@@ -24,7 +24,7 @@ public class MainFrame extends JFrame implements AlgorithmListener{
 	private ArrayList<String> criteriaList = new ArrayList<String>();
 	private ArrayList<String> productsList = new ArrayList<String>();
 	
-	private SomeClass algorithm;
+	private Algorithm algorithm;
 	private PreferencesManager manager;
 	
 	/**
@@ -108,7 +108,7 @@ public class MainFrame extends JFrame implements AlgorithmListener{
 	}
 	
 	public void onClickRun(ArrayList<Double[][]> matrices){
-		algorithm = new SomeClass(preferencesPanel, this);
+		algorithm = new Algorithm(preferencesPanel, this);
 		algorithm.runAlgorithm(matrices);
 	}
 	
@@ -140,9 +140,8 @@ public class MainFrame extends JFrame implements AlgorithmListener{
 		matrices.add(products2);
 		matrices.add(products3);
 		
-		algorithm = new SomeClass(preferencesPanel, this);
-		algorithm.setPreferences(matrices);
-		algorithm.normalizeMatrixes(matrices);
+		algorithm = new Algorithm(preferencesPanel, this);
+		algorithm.testAlgorithm(matrices);
 	}
 	
 	public PreferencesManager getPreferencesManager() {
