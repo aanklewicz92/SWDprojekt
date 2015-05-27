@@ -112,7 +112,7 @@ public class MainFrame extends JFrame implements AlgorithmListener{
 		algorithm.runAlgorithm(matrices);
 	}
 	
-	public void testAlgorithm() {  //metoda do wywalenia jak bêdzie wszystko dzia³aæ
+	/*public void testAlgorithm() {  //metoda do wywalenia jak bêdzie wszystko dzia³aæ
 		Double[][] criteria = new Double[][]{
 				  { 1.0,	7.0,	0.3333 },
 				  { 0.1429,	1.0,	0.2 },
@@ -133,16 +133,47 @@ public class MainFrame extends JFrame implements AlgorithmListener{
 				  { 1.0,	5.0 },
 				  { 0.2,	1.0 }
 				};
+		Double[][] criteria = new Double[][]{
+				  { 1.0,		3.0,		7.0,		9.0 },
+				  { 1.0/3.0,	1.0,		3.0,		7.0 },
+				  { 1.0/7.0,	1.0/3.0,	1.0,		3.0 },
+				  { 1.0/9.0,	1.0/7.0,	1.0/3.0,	1.0 }
+				};
+		
+		Double[][] products1 = new Double[][]{
+				  { 1.0,		1.0,		7.0 },
+				  { 1.0,		1.0,		3.0 },
+				  { 1.0/7.0,	1.0/3.0,	1.0 }
+				};
+		
+		Double[][] products2 = new Double[][]{
+				  { 1.0,		0.2,		1.0 },
+				  { 5.0,		1.0,		3.0 },
+				  { 1.0,		1.0/3.0,	1.0 }
+				};
+		
+		Double[][] products3 = new Double[][]{
+				  { 1.0,		1.0,		7.0 },
+				  { 1.0,		1.0,		3.0 },
+				  { 1.0/7.0,	1.0/3.0,	1.0 }
+				};
+		
+		Double[][] products4 = new Double[][]{
+				  { 1.0,		7.0,		9.0 },
+				  { 1.0/7.0,	1.0,		1.0 },
+				  { 1.0/9.0,	1.0,		1.0 }
+				};
 		
 		ArrayList<Double[][]> matrices = new ArrayList<Double[][]>();
 		matrices.add(criteria);
 		matrices.add(products1);
 		matrices.add(products2);
 		matrices.add(products3);
+		matrices.add(products4);
 		
 		algorithm = new Algorithm(preferencesPanel, this);
 		algorithm.testAlgorithm(matrices);
-	}
+	}*/
 	
 	public PreferencesManager getPreferencesManager() {
 		return manager;

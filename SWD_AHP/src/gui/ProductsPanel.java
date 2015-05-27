@@ -170,10 +170,10 @@ public class ProductsPanel extends JPanel {
 		add(buttonClearAll, gbcbuttonClearAll);
 		
 		buttonDone = new JButton("Gotowe");
-		//buttonDone.setEnabled(false); //do odkomentowania
+		buttonDone.setEnabled(false); //do odkomentowania
 		buttonDone.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				/*textFieldName.setEnabled(false);
+				textFieldName.setEnabled(false);
 				list.setEnabled(false);
 				buttonAdd.setEnabled(false);
 				buttonDelete.setEnabled(false);
@@ -181,8 +181,8 @@ public class ProductsPanel extends JPanel {
 				ArrayList<String> list = new ArrayList<>();
 				for(int i = 0; i < listModel.size(); i++)
 					list.add(listModel.getElementAt(i));
-				parentFrame.onClickProductsDone(list);*/
-				parentFrame.testAlgorithm(); //linijka do wywalenia jak bêdzie wszystko dzia³aæ
+				parentFrame.onClickProductsDone(list);
+				//parentFrame.testAlgorithm(); //linijka do wywalenia jak bêdzie wszystko dzia³aæ
 			}
 		});
 		GridBagConstraints gbcbuttonDone = new GridBagConstraints();

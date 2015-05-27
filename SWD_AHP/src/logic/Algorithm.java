@@ -18,9 +18,11 @@ public class Algorithm {
 		algorithmListener.algorithmFinished(productsRank);
 	}
 	
-	public void testAlgorithm(ArrayList<Double[][]> matrices) {
-		calculate(matrices);
-	}
+	/*public void testAlgorithm(ArrayList<Double[][]> matrices) {
+		ArrayList<Integer> productsRank = calculate(matrices);
+		for(Integer el : productsRank)
+			System.out.print(el + " ");
+	}*/
 	
 	private ArrayList<Integer> calculate(ArrayList<Double[][]> matrices ){
 		int criteriaMatrixLength = matrices.get(0).length, productMatrixLength = matrices.get(1).length;
@@ -34,14 +36,14 @@ public class Algorithm {
 		Double[][] productsSVectors = new Double[matrices.size()][productMatrixLength];
 		Double[] rankVector = new Double [matrices.get(1).length];
 		
-		//Obliczanie wektora C dla mcierzy kryteri體
+		//Obliczanie wektora C dla mcierzy kryteri贸w
 		for(int i = 0; i < criteriaMatrixLength; i++) {
 			criteriaCVector[i] = 0.0;
 			for(int j = 0; j < criteriaMatrixLength; j++)
 				criteriaCVector[i] += criteriaMatrix[j][i];
 		}
 		
-		//Obliczanie wektor體 C dla macierzy produkt體
+		//Obliczanie wektor贸w C dla macierzy produkt贸w
 		for(int k = 1; k < matrices.size(); k++) {
 			Double[][] productMatixs = matrices.get(k);
 			for(int i = 0; i < productMatrixLength; i++) {
@@ -51,28 +53,12 @@ public class Algorithm {
 			}
 		}
 		
-		//Normalizacja macierzy kryteri體
+		//Normalizacja macierzy kryteri贸w
 		for(int i = 0; i < criteriaMatrixLength; i++)
 			for(int j = 0; j < criteriaMatrixLength; j++)
 				normalizedCriteriaMatrix[j][i] = (criteriaMatrix[j][i] / criteriaCVector[i]);
 		
-		//Obliczanie wektora S macierzy kryteri體
-		for(int i = 0; i < criteriaMatrixLength; i++) {
-			Double elementsSum = 0.0;
-			for(int j = 0; j < criteriaMatrixLength; j++)
-				elementsSum += normalizedCriteriaMatrix[i][j];
-			criteriaSVector[i] = elementsSum / criteriaMatrixLength;
-		}
-		
-		//Sprawdzanie sp骿no渃i macierzy kryteri體
-		Double lambda = 0.0;
-		for(int i = 0; i < criteriaMatrixLength; i++)
-			lambda += criteriaCVector[i]*criteriaSVector[i];
-		Double consistencyRatio = (lambda - criteriaMatrixLength) / (criteriaMatrixLength - 1) / getConsistencyRatio(criteriaMatrixLength);
-		if(consistencyRatio > MIN_CONSISTENCY_RATIO)
-			inconsistentMarixListener.inconsistentMatrix(0);
-		
-		//Normalizacja macierzy produkt體
+		//Normalizacja macierzy produkt贸w
 		for(int k = 1; k < matrices.size(); k++) {
 			Double[][] productsMatrix = matrices.get(k);
 			Double[][] normalizedProductMatrix = new Double[productMatrixLength][productMatrixLength];
@@ -82,7 +68,15 @@ public class Algorithm {
 			normalizedProductsMatrices.add(normalizedProductMatrix);
 		}
 		
-		//Obliczanie wektor體 S macierzy produkt體
+		//Obliczanie wektora S macierzy kryteri贸w
+		for(int i = 0; i < criteriaMatrixLength; i++) {
+			Double elementsSum = 0.0;
+			for(int j = 0; j < criteriaMatrixLength; j++)
+				elementsSum += normalizedCriteriaMatrix[i][j];
+			criteriaSVector[i] = elementsSum / criteriaMatrixLength;
+		}
+		
+		//Obliczanie wektor贸w S macierzy produkt贸w
 		for(int k = 0; k < normalizedProductsMatrices.size(); k++) {
 			Double[][] normalizedMatrix = normalizedProductsMatrices.get(k);
 			for(int i = 0; i < normalizedMatrix.length; i++) {
@@ -93,7 +87,15 @@ public class Algorithm {
 			}
 		}
 		
-		//Sprawdzanie sp骿no渃i macierzy produkt體
+		//Sprawdzanie sp贸jno艙ci macierzy kryteri贸w
+		Double lambda = 0.0;
+		for(int i = 0; i < criteriaMatrixLength; i++)
+			lambda += criteriaCVector[i]*criteriaSVector[i];
+		Double consistencyRatio = (lambda - criteriaMatrixLength) / (criteriaMatrixLength - 1) / getConsistencyRatio(criteriaMatrixLength);
+		if(consistencyRatio > MIN_CONSISTENCY_RATIO)
+			inconsistentMarixListener.inconsistentMatrix(0);
+		
+		//Sprawdzanie sp贸jno艙ci macierzy produkt贸w
 		Double randomConsistencyIndex = getConsistencyRatio(productMatrixLength);
 		for(int i = 0; i < criteriaMatrixLength; i++) {
 			lambda = 0.0;
@@ -131,22 +133,22 @@ public class Algorithm {
 		return rank;
 	}
 	
-	private double getConsistencyRatio (int matrixSize) {
-		switch (matrixSize) {
-				case 3: return 0.52;
-				case 4: return 0.89;
-				case 5: return 1.11;
-				case 6: return 1.25;
-				case 7: return 1.35;
-				case 8: return 1.4;
-				case 9: return 1.45;
-				case 10: return 1.49;
-				case 11: return 1.51;
-				case 12: return 1.54;
-				case 13: return 1.56;
-				case 14: return 1.57;
-				case 15: return 1.58;
-				default: return -1;
-				}
-	}
+	public double getConsistencyRatio(int matrixSize) {
+			switch (matrixSize) {
+					case 2:  return 0.52;
+					case 3:  return 0.58;
+					case 4:  return 0.89;
+					case 5: return 1.11;
+					case 6: return 1.25;
+					case 7: return 1.37;
+					case 8: return 1.4;
+					case 9: return 1.45;
+					case 10: return 1.49;
+					case 11: return 1.51;
+					case 12: return 1.54;
+					case 13: return 1.56;
+					case 14: return 1.58;
+					default: return 0.0;
+			}
+		}
 }
