@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class Algorithm {
 	static final Double MIN_CONSISTENCY_RATIO = 0.1;
 	
-	InconsistentMatrixListener inconsistentMarixListener;
+	MatrixConsistencyListener inconsistentMarixListener;
 	AlgorithmListener algorithmListener;
 	
-	public Algorithm(InconsistentMatrixListener incnsistentMatrixListener, AlgorithmListener algorithmListener) {
+	public Algorithm(MatrixConsistencyListener incnsistentMatrixListener, AlgorithmListener algorithmListener) {
 		this.inconsistentMarixListener = incnsistentMatrixListener;
 		this.algorithmListener = algorithmListener;
 	}
@@ -29,11 +29,11 @@ public class Algorithm {
 		
 		Double[][] criteriaMatrix = matrices.get(0);
 		Double[] criteriaCVector = new Double [criteriaMatrixLength];
-		Double[][] productsCVectors = new Double[matrices.size()][productMatrixLength];
+		Double[][] productsCVectors = new Double[matrices.size()-1][productMatrixLength];
 		Double[][] normalizedCriteriaMatrix = new Double[criteriaMatrixLength][criteriaMatrixLength];
 		Double[] criteriaSVector = new Double[criteriaMatrixLength];
 		ArrayList<Double[][]> normalizedProductsMatrices = new ArrayList<Double[][]>();
-		Double[][] productsSVectors = new Double[matrices.size()][productMatrixLength];
+		Double[][] productsSVectors = new Double[matrices.size()-1][productMatrixLength];
 		Double[] rankVector = new Double [matrices.get(1).length];
 		
 		//Obliczanie wektora C dla mcierzy kryteriów
@@ -47,9 +47,9 @@ public class Algorithm {
 		for(int k = 1; k < matrices.size(); k++) {
 			Double[][] productMatixs = matrices.get(k);
 			for(int i = 0; i < productMatrixLength; i++) {
-				productsCVectors[k][i] = 0.0;
+				productsCVectors[k-1][i] = 0.0;
 				for(int j = 0; j < productMatrixLength; j++)
-					productsCVectors[k][i] += productMatixs[j][i];
+					productsCVectors[k-1][i] += productMatixs[j][i];
 			}
 		}
 		
@@ -64,7 +64,7 @@ public class Algorithm {
 			Double[][] normalizedProductMatrix = new Double[productMatrixLength][productMatrixLength];
 			for(int i = 0; i < productMatrixLength; i++)
 				for(int j = 0; j < productMatrixLength; j++)
-					normalizedProductMatrix[i][j] = (productsMatrix[j][i] / productsCVectors[k][i]);	
+					normalizedProductMatrix[i][j] = (productsMatrix[j][i] / productsCVectors[k-1][i]);	
 			normalizedProductsMatrices.add(normalizedProductMatrix);
 		}
 		
@@ -88,22 +88,28 @@ public class Algorithm {
 		}
 		
 		//Sprawdzanie spójnoœci macierzy kryteriów
-		Double lambda = 0.0;
-		for(int i = 0; i < criteriaMatrixLength; i++)
-			lambda += criteriaCVector[i]*criteriaSVector[i];
-		Double consistencyRatio = (lambda - criteriaMatrixLength) / (criteriaMatrixLength - 1) / getConsistencyRatio(criteriaMatrixLength);
-		if(consistencyRatio > MIN_CONSISTENCY_RATIO)
-			inconsistentMarixListener.inconsistentMatrix(0);
+		if(criteriaMatrixLength != 2) {
+			Double lambda = 0.0;
+			for(int i = 0; i < criteriaMatrixLength; i++)
+				lambda += criteriaCVector[i]*criteriaSVector[i];
+			Double consistencyRatio = (lambda - criteriaMatrixLength) / (criteriaMatrixLength - 1) / getConsistencyRatio(criteriaMatrixLength);
+			if(consistencyRatio > MIN_CONSISTENCY_RATIO)
+				inconsistentMarixListener.inconsistentMatrix(0);
+			inconsistentMarixListener.matrixConsistency(0, consistencyRatio);
+		}
 		
 		//Sprawdzanie spójnoœci macierzy produktów
-		Double randomConsistencyIndex = getConsistencyRatio(productMatrixLength);
-		for(int i = 0; i < criteriaMatrixLength; i++) {
-			lambda = 0.0;
-			for(int j = 0; j < productMatrixLength; j++)
-				lambda += (productsSVectors[i][j]*productsCVectors[i+1][j]);
-			consistencyRatio = (lambda - productMatrixLength) / (productMatrixLength - 1) / randomConsistencyIndex;
-			if(consistencyRatio > MIN_CONSISTENCY_RATIO)
-				inconsistentMarixListener.inconsistentMatrix(i);
+		if(productMatrixLength != 2) {
+			Double randomConsistencyIndex = getConsistencyRatio(productMatrixLength);
+			for(int i = 0; i < criteriaMatrixLength; i++) {
+				Double lambda = 0.0;
+				for(int j = 0; j < productMatrixLength; j++)
+					lambda += (productsSVectors[i][j]*productsCVectors[i][j]);
+				Double consistencyRatio = (lambda - productMatrixLength) / (productMatrixLength - 1) / randomConsistencyIndex;
+				if(consistencyRatio > MIN_CONSISTENCY_RATIO)
+					inconsistentMarixListener.inconsistentMatrix(i + 1);
+				inconsistentMarixListener.matrixConsistency(i + 1, consistencyRatio);
+			}
 		}
 		
 		//Obliczenie ostatecznego rankingu
@@ -135,7 +141,6 @@ public class Algorithm {
 	
 	public double getConsistencyRatio(int matrixSize) {
 			switch (matrixSize) {
-					case 2:  return 0.52;
 					case 3:  return 0.58;
 					case 4:  return 0.89;
 					case 5: return 1.11;

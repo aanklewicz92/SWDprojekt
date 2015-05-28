@@ -2,19 +2,26 @@ package gui;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
 import java.awt.GridBagLayout;
+
 import javax.swing.JButton;
+
 import java.awt.GridBagConstraints;
+
 import javax.swing.JLabel;
+
 import java.awt.Insets;
+
 import javax.swing.JRadioButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-import logic.InconsistentMatrixListener;
+import logic.MatrixConsistencyListener;
 
-public class PreferencesPanel extends JPanel implements InconsistentMatrixListener{
+public class PreferencesPanel extends JPanel implements MatrixConsistencyListener{
 	private PreferencesManager manager;
 	private MainFrame mainFrame;
 	private ArrayList<String> productsList, criteriaList;
@@ -354,9 +361,8 @@ public class PreferencesPanel extends JPanel implements InconsistentMatrixListen
 	@Override
 	public void inconsistentMatrix(Integer number) {
 		String message = "kryteriów";
-		int userMatrixNumber = number + 1;
 		if (number != 0)
-			message = "produktów " + userMatrixNumber;
+			message = "produktów " + number;
 		
 		Object[] options = {"Ok", "Poka¿ macierz"};
 		int n = JOptionPane.showOptionDialog(mainFrame,
@@ -373,5 +379,14 @@ public class PreferencesPanel extends JPanel implements InconsistentMatrixListen
 				MatrixDialog.main(criteriaList, manager.getMatrix(number), "Macierz kryteriów");
 			else
 				MatrixDialog.main(productsList, manager.getMatrix(number), "Macierz produktów");
+	}
+
+	@Override
+	public void matrixConsistency(Integer matrixNumebr, Double consistency) {
+		String message = "kryteriów";
+		if (matrixNumebr != 0)
+			message = "produktów " + matrixNumebr;
+		String roundedConsistency = String.format("%.3f", consistency);
+		JOptionPane.showMessageDialog(mainFrame, "Spójnoœæ macierzy " + message + " wynosi " + roundedConsistency);
 	}
 }
