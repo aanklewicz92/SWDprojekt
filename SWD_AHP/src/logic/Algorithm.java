@@ -147,7 +147,8 @@ public class Algorithm {
 					case 11: return 1.51;
 					case 12: return 1.54;
 					case 13: return 1.56;
-					case 14: return 1.58;
+					case 14: return 1.57;
+					case 15: return 1.58;
 					default: return 0.0;
 			}
 		}
